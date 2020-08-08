@@ -4,8 +4,8 @@ A typed version of Node.js EventEmitter with TypeScript decorators.
 import { EventEmitter, Events, EventDecorator, on, once } from "ts-decorated-events";
 
 // redefine on and once to the correct type
-const testOn: EventDecorator<Test> = on;
-const testOnce: EventDecorator<Test> = once;
+const testOn: EventDecorator<TestEvents> = on;
+const testOnce: EventDecorator<TestEvents> = once;
 
 // define the events
 interface TestEvents extends Events {
