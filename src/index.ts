@@ -3,7 +3,7 @@ import { EventEmitter as NodeEventEmitter } from "events";
 // types
 
 export interface Events extends Record<string | symbol, any[]> {}
-//export type InferEvents<T> = T extends EventEmitter<infer R> ? R : never;
+export type InferEvents<T> = T extends EventEmitter<infer R> ? R : never;
 
 export interface EventDecorated<E extends Events, K extends keyof E> {
   <T extends EventEmitter<E>>(
