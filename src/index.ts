@@ -3,20 +3,20 @@ import { EventEmitter as NodeEventEmitter } from "events";
 // types
 
 export interface Events extends Record<string | symbol, any[]> {}
-export type InferEvents<T> = T extends EventEmitter<infer R> ? R : never;
+//export type InferEvents<T> = T extends EventEmitter<infer R> ? R : never;
 
-export interface EventDecorated<T extends EventEmitter, K extends keyof InferEvents<T>> {
-  <E extends InferEvents<T>>(
+export interface EventDecorated<E extends Events, K extends keyof E> {
+  <T extends EventEmitter<E>>(
     target: T, key: string | symbol,
     descriptor: TypedPropertyDescriptor<(this: T, ...args: E[K]) => any>
   ): void;
-  <E extends InferEvents<T>, C extends Function & {prototype: T}>(
+  <T extends EventEmitter<E>, C extends Function & {prototype: T}>(
     target: C, key: string | symbol,
     descriptor: TypedPropertyDescriptor<(this: C, emitter: T, ...args: E[K]) => any>
   ): void;
 }
-export interface EventDecorator<T extends EventEmitter> {
-  <K extends keyof InferEvents<T> & (string | symbol)>(event: K): EventDecorated<T, K>;
+export interface EventDecorator<E extends Events = Events> {
+  <K extends keyof E & (string | symbol)>(event: K): EventDecorated<E, K>;
 }
 
 // decorators
@@ -36,7 +36,7 @@ function decorate(type: "on" | "once") {
         });
       }
     };
-  }) as EventDecorator<EventEmitter>;
+  }) as EventDecorator;
 }
 
 export const on = decorate("on");
