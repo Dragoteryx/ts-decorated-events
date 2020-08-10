@@ -13,7 +13,7 @@ interface TestEvents extends Events {
   event2: [number, string];
 }
 
-// decorators can be used on method and static methods
+// decorators can be used on methods and static methods
 class Test extends EventEmitter<TestEvents> {
 
   @testOn("event1")
@@ -28,7 +28,7 @@ class Test extends EventEmitter<TestEvents> {
 
 }
 ```
-You can define the events as a type instead of an interface to be stricter.
+You can define the events as a type instead of an interface to be stricter.\
 Defining the types as an interface allows calling unknown events.
 ```ts
 type TestEvents = {
