@@ -13,17 +13,6 @@ interface TestEvents extends Events {
   event2: [number, string];
 }
 
-/*
-  You can define the events as a type instead of an interface to be stricter.
-  Defining the types as an interface allows calling unknown events.
-
-  type TestEvents = {
-    event1: [string, number];
-    event2: [number, string];
-  }
-
-*/
-
 // decorators can be used on method and static methods
 class Test extends EventEmitter<TestEvents> {
 
@@ -37,5 +26,20 @@ class Test extends EventEmitter<TestEvents> {
     // -- do static stuff once
   }
 
+}
+```
+You can define the events as a type instead of an interface to be stricter.
+Defining the types as an interface allows calling unknown events.
+```ts
+type TestEvents = {
+  event1: [string, number];
+  event2: [number, string];
+}
+```
+You can also use this notation to name the tuple members:
+```ts
+interface TestEvents extends Events {
+  event1: Parameters<(a: string, b: number) => 0>;
+  event2: Parameters<(a: number, b: string) => 0>;
 }
 ```

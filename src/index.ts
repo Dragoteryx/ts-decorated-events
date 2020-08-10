@@ -25,7 +25,7 @@ const DECORATE_EVENT_EMITTER = Symbol("Decorate EventEmitter");
 
 function decorate(type: "on" | "once") {
   return ((event: string) => {
-    return (target: typeof EventEmitter | EventEmitter, key: string) => {
+    return (target: typeof EventEmitter | EventEmitter, key: keyof typeof target) => {
       const prototype = "prototype" in target ? target.prototype : target;
       const old_decorate = prototype[DECORATE_EVENT_EMITTER];
       prototype[DECORATE_EVENT_EMITTER] = function() {

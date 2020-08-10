@@ -1,6 +1,6 @@
 {
   "name": "ts-decorated-events",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A typed version of Node.js EventEmitter with TypeScript decorators.",
   "main": "dist/index.js",
   "dependencies": {
