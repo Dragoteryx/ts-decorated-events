@@ -18,18 +18,19 @@ export interface EventDecorated<E extends Events, K extends keyof E> {
 export interface EventDecorator<E extends Events = Events> {
   <K extends keyof E & (string | symbol)>(event: K): EventDecorated<E, K>;
 }
+export namespace EventDecorator {
+  export const symbol = Symbol("EventDecorator");
+}
 
 // decorators
-
-const DECORATE_EVENT_EMITTER = Symbol("Decorate EventEmitter");
 
 function decorate(type: "on" | "once") {
   return ((event: string) => {
     return (target: typeof EventEmitter | EventEmitter, key: keyof typeof target) => {
       const prototype = "prototype" in target ? target.prototype : target;
-      const old_decorate = prototype[DECORATE_EVENT_EMITTER];
-      prototype[DECORATE_EVENT_EMITTER] = function() {
-        old_decorate.call(this);
+      const old_decorate = prototype[EventDecorator.symbol];
+      prototype[EventDecorator.symbol] = function() {
+        if (typeof old_decorate == "function") old_decorate.call(this);
         this[type](event, (...args: any[]) => {
           // @ts-expect-error
           target == prototype ? target[key].call(this, ...args) : target[key].call(target, this, ...args);
@@ -45,13 +46,13 @@ export const once = decorate("once");
 // main class
 
 export class EventEmitter<E extends Events> extends NodeEventEmitter {
-  private [DECORATE_EVENT_EMITTER]() {}
+  private [EventDecorator.symbol]() {}
   public constructor(...args: ConstructorParameters<typeof NodeEventEmitter>) {
     super(...args);
-    this[DECORATE_EVENT_EMITTER]();
+    this[EventDecorator.symbol]();
   }
 }
-Object.defineProperty(EventEmitter.prototype, DECORATE_EVENT_EMITTER, {configurable: false, enumerable: false});
+Object.defineProperty(EventEmitter.prototype, EventDecorator.symbol, {configurable: false, enumerable: false});
 
 type Listener<T extends any[]> = (...args: T) => any;
 export interface EventEmitter<E extends Events = Events> extends NodeEventEmitter {
