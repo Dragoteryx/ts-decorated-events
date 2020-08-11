@@ -28,7 +28,9 @@ function decorate(type: "on" | "once") {
   return ((event: string) => {
     return (target: typeof EventEmitter | EventEmitter, key: keyof typeof target) => {
       const prototype = "prototype" in target ? target.prototype : target;
+      // @ts-expect-error
       const old_decorate = prototype[EventDecorator.symbol];
+      // @ts-expect-error
       prototype[EventDecorator.symbol] = function() {
         if (typeof old_decorate == "function") old_decorate.call(this);
         this[type](event, (...args: any[]) => {
@@ -46,10 +48,10 @@ export const once = decorate("once");
 // main class
 
 export class EventEmitter<E extends Events> extends NodeEventEmitter {
-  private [EventDecorator.symbol]() {}
   public constructor(...args: ConstructorParameters<typeof NodeEventEmitter>) {
     super(...args);
-    this[EventDecorator.symbol]();
+    // @ts-expect-error
+    if (this[EventDecorator.symbol]) this[EventDecorator.symbol]();
   }
 }
 Object.defineProperty(EventEmitter.prototype, EventDecorator.symbol, {configurable: false, enumerable: false});
