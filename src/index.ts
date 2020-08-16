@@ -54,7 +54,11 @@ export class EventEmitter<E extends Events> extends NodeEventEmitter {
     if (this[EventDecorator.symbol]) this[EventDecorator.symbol]();
   }
 }
-Object.defineProperty(EventEmitter.prototype, EventDecorator.symbol, {configurable: false, enumerable: false});
+Object.defineProperty(EventEmitter.prototype, EventDecorator.symbol, {
+  configurable: false,
+  enumerable: false,
+  writable: true
+});
 
 type Listener<T extends any[]> = (...args: T) => any;
 export interface EventEmitter<E extends Events = Events> extends NodeEventEmitter {

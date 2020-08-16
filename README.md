@@ -43,3 +43,10 @@ interface TestEvents extends Events {
   event2: Parameters<(a: number, b: string) => 0>;
 }
 ```
+Or using TypeScript 4:
+```ts
+interface TestEvents extends Events {
+  event1: [a: string, b: number];
+  event2: [a: number, b: string];
+}
+```
